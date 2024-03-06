@@ -1,9 +1,24 @@
+const express = require("express");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
+const app = express();
+
+app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.send('<h1>Hello world</h1>');
+});
+
+
 
 const httpServer = createServer();
+
 const io = new Server(httpServer, {
-  cors: "http://localhost:5174/",
+  cors: "*",
+});
+
+httpServer.listen(3000, () => {
+  console.log("Backend server is running!");
 });
 
 const allUsers = {};
@@ -82,4 +97,4 @@ io.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(3000);
+
