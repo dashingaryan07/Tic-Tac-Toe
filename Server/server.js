@@ -1,24 +1,27 @@
 const express = require("express");
-const { createServer } = require("http");
-const { Server } = require("socket.io");
 const app = express();
-
-app.use(express.json());
-
-app.get('/', (req, res) => {
-  res.send('<h1>Hello world</h1>');
-});
+const { createServer } = require("http");
+const { Server, socket } = require("socket.io");
+const helmet = require ("helmet");
 
 
-
-const httpServer = createServer();
-
+const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: "*",
 });
 
-httpServer.listen(3000, () => {
-  console.log("Backend server is running!");
+app.use(express.json());
+app.use(helmet())
+
+
+app.get('/', function (req,res) {
+  res.send('<h1>Hello World</h1>');
+});
+
+
+httpServer.listen(5000, (req, res) => {
+
+  console.log("Socket is running");
 });
 
 const allUsers = {};
@@ -96,5 +99,3 @@ io.on("connection", (socket) => {
     }
   });
 });
-
-
